@@ -105,7 +105,7 @@ return mes
 
 enum class TimeUnits{
     SECOND{
-        override fun plurals(value:Int):String{
+        override fun plural(value:Int):String{
             val lastNum = value.toString().last().toString().toInt()
             if (lastNum == 1 && value !=11) return "$value секунду"
             else if (lastNum in 2..4 && value !in 12..14) return "$value секунды"
@@ -113,7 +113,7 @@ enum class TimeUnits{
         }
     },
     MINUTE{
-        override fun plurals(value:Int):String{
+        override fun plural(value:Int):String{
             val lastNum = value.toString().last().toString().toInt()
             if (lastNum == 1 && value !=11) return "$value минуту"
             else if (lastNum in 2..4 && value !in 12..14) return "$value минуты"
@@ -121,7 +121,7 @@ enum class TimeUnits{
         }
     },
     HOUR{
-        override fun plurals(value:Int):String{
+        override fun plural(value:Int):String{
             val lastNum = value.toString().last().toString().toInt()
             if (lastNum == 1 && value !=11) return "$value час"
             else if (lastNum in 2..4 && value !in 12..14) return "$value часа"
@@ -129,12 +129,12 @@ enum class TimeUnits{
         }
     },
     DAY{
-        override fun plurals(value:Int):String{
+        override fun plural(value:Int):String{
             val lastNum = value.toString().last().toString().toInt()
             if (lastNum == 1 && value !=11 && value != 111 && value != 211) return "$value день"
             else if (lastNum in 2..4 && value !in 12..14 && value !in 112..114 && value !in 212..214) return "$value дня"
             else return "$value дней"
         }
     };
-    abstract fun plurals(value:Int):String
+    abstract fun plural(value:Int):String
 }
