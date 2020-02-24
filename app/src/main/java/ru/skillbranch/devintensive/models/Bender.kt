@@ -20,10 +20,14 @@ class Bender(var status:Status = Status.NORMAL, var question:Question = Question
         val validation:String? = validateAnswer(answer)
         Log.d("M-Bender","validation $validation" )
         return if (validation!=null) "$validation\n${question.question}" to status.color
-            else if (question.answers.contains(answer.toLowerCase())) {
+            else if (question != Question.IDLE && question.answers.contains(answer.toLowerCase())) {
             question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
-        } else {
+        }
+        else if (question == Question.IDLE){
+            "Отлично - ты справился\n${question.question}" to status.color
+        }
+        else {
             status = status.nextStatus()
             if (status == Status.NORMAL) {
                 "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
