@@ -6,11 +6,11 @@
     android:padding="@dimen/spacing_normal_16"
     android:background="@android:color/white">
 
-    <ru.skillbranch.devintensive.ui.custom.AvatarImageViewMask
+    <ru.skillbranch.devintensive.ui.custom.AvatarImageView
         android:id="@+id/iv_avatar_single"
         android:layout_width="@dimen/btn_round_size_40"
         android:layout_height="@dimen/btn_round_size_40"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/profile_bg"
         android:layout_alignParentLeft="true"/>
 
     <View
