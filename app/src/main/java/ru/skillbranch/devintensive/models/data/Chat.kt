@@ -28,7 +28,7 @@ data class Chat(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun lastMessageShort(): Pair<String, String?> = when(val lastMessage = messages.lastOrNull()){
         //TODO implement me
-        null -> "" to ""//TODO
+        null -> "Сообщений еще нет" to "@John_Doe"//TODO
         else -> "" to ""//TODO
     }
 

@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fab.setOnClickListener{
-            viewModel.addItems()
+
         }
     }
 
@@ -63,4 +63,4 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-//stopped at 1:34
+//stopped at 2:00

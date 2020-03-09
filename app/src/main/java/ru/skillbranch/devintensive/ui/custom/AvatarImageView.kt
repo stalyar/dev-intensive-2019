@@ -59,21 +59,21 @@ class AvatarImageView @JvmOverloads constructor(
     private val initialsPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val viewRect = Rect()
     private val borderRect = Rect()
-    private var isAvatarMode = true
+    private var isAvatarMode = false
     private var size = 0
 
     init {
         if (attrs != null){
-            val ta = context.obtainStyledAttributes(attrs, R.styleable.AvatarImageViewMask)
+            val ta = context.obtainStyledAttributes(attrs, R.styleable.AvatarImageView)
             borderWidth = ta.getDimension(
-                    R.styleable.AvatarImageViewMask_aivm_borderWidth,
+                    R.styleable.AvatarImageView_aiv_borderWidth,
                     context.dpToPx(DEFAULT_BORDER_WIDTH)
             )
             borderColor = ta.getColor(
-                    R.styleable.AvatarImageViewMask_aivm_borderColor,
+                    R.styleable.AvatarImageView_aiv_borderColor,
                     DEFAULT_BORDER_COLOR
             )
-            initials = ta.getString(R.styleable.AvatarImageViewMask_aivm_initials) ?: "??"
+            initials = ta.getString(R.styleable.AvatarImageView_aiv_initials) ?: "??"
             ta.recycle()
         }
 
@@ -85,7 +85,7 @@ class AvatarImageView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        Log.e("AvatarImageViewMask", """
+        Log.e("AvatarImageView", """
             onMeasure
             width: ${MeasureSpec.toString((widthMeasureSpec))}
             height: ${MeasureSpec.toString((heightMeasureSpec))}
@@ -93,7 +93,7 @@ class AvatarImageView @JvmOverloads constructor(
 
         val initSize = resolveDefaultSize(widthMeasureSpec)
         setMeasuredDimension(max(initSize, size), max(initSize, size))
-        Log.e("AvatarImageViewMask", "onMeasure after spec size: $measuredWidth $measuredHeight")
+        Log.e("AvatarImageView", "onMeasure after spec size: $measuredWidth $measuredHeight")
     }
 
     fun resolveDefaultSize(spec:Int):Int{
@@ -109,7 +109,7 @@ class AvatarImageView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        Log.e("AvatarImageViewMask", "onSizeChanged")
+        Log.e("AvatarImageView", "onSizeChanged")
         if (w==0) return
         with(viewRect){
             left=0
@@ -118,12 +118,12 @@ class AvatarImageView @JvmOverloads constructor(
             bottom = h
         }
 
-        prepareShader(w, h)
+        if(isAvatarMode) prepareShader(w, h)
     }
 
     override fun onDraw(canvas: Canvas) {
         //super.onDraw(canvas)
-        Log.e("AvatarImageViewMask", "onDraw")
+        Log.e("AvatarImageView", "onDraw")
 
         if (drawable != null && isAvatarMode){
             drawAvatar(canvas)
@@ -230,7 +230,7 @@ class AvatarImageView @JvmOverloads constructor(
             textSize = height * 0.33f
         }
         val offsetY = (initialsPaint.descent() + initialsPaint.ascent())/2
-        canvas.drawText(initials, viewRect.exactCenterX(), viewRect.exactCenterY(), initialsPaint)
+        canvas.drawText(initials, viewRect.exactCenterX(), viewRect.exactCenterY()-offsetY, initialsPaint)
     }
 
     private fun initialsToColor(letters: String) : Int{
