@@ -139,6 +139,28 @@ class AvatarImageView @JvmOverloads constructor(
         canvas.drawOval(borderRect.toRectF(), borderPaint)
     }
 
+    override fun onSaveInstanceState(): Parcelable? {
+        Log.e("AvatarImageView", "onSaveInstanceState $id")
+        val savedState = SavedState(super.onSaveInstanceState())
+        savedState.isAvatarMode = isAvatarMode
+        savedState.borderWidth = borderWidth
+        savedState.borderColor = borderColor
+        return savedState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        Log.e("AvatarImageView", "onRestoreInstanceState $id")
+        if (state is SavedState){
+            super.onRestoreInstanceState(state)
+            isAvatarMode = state.isAvatarMode
+            borderWidth = state.borderWidth
+            borderColor = state.borderColor
+        }
+        else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
     override fun setImageBitmap(bm: Bitmap?) {
         super.setImageBitmap(bm)
         if (isAvatarMode) prepareShader(width, height)
@@ -252,21 +274,23 @@ class AvatarImageView @JvmOverloads constructor(
         constructor(superState : Parcelable?) : super(superState)
 
         constructor(src: Parcel) : super(src) {
+            //restore state from parcel
+
             isAvatarMode = src.readInt() == 1
             borderWidth = src.readFloat()
             borderColor = src.readInt()
         }
 
         override fun writeToParcel(dst: Parcel, flags: Int) {
+            //write state to parcel
+
             super.writeToParcel(dst, flags)
             dst.writeInt(if(isAvatarMode) 1 else 0)
             dst.writeFloat(borderWidth)
             dst.writeInt(borderColor)
-
         }
 
         override fun describeContents() = 0
-        }
 
         companion object CREATOR : Parcelable.Creator<SavedState> {
             override fun createFromParcel(parcel: Parcel) = SavedState(parcel)
@@ -276,5 +300,3 @@ class AvatarImageView @JvmOverloads constructor(
 
     }
 }
-
-        stopped at 39:10
