@@ -12,6 +12,14 @@
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>
 
+        <!-->чтобы показывать анимацию из стилей-->
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
+
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/color_accent</item>
     </style>
 
 </resources>

@@ -12,7 +12,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
 import ru.skillbranch.devintensive.R
-import ru.skillbranch.devintensive.models.data.Chat
+import ru.skillbranch.devintensive.models.data.ChatType
 import ru.skillbranch.devintensive.models.data.ChatItem
 
 class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAdapter.ChatItemViewHolder>() {
@@ -26,9 +26,9 @@ class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAd
     var items : List<ChatItem> = listOf()
 
     override fun getItemViewType(position: Int): Int = when(items[position].chatType){
-        Chat.ChatType.ARCHIVE -> ARCHIVE_TYPE
-        Chat.ChatType.SINGLE -> SINGLE_TYPE
-        Chat.ChatType.GROUP -> GROUP_TYPE
+        ChatType.ARCHIVE -> ARCHIVE_TYPE
+        ChatType.SINGLE -> SINGLE_TYPE
+        ChatType.GROUP -> GROUP_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {

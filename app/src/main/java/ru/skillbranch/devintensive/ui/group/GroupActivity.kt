@@ -1,8 +1,13 @@
 package ru.skillbranch.devintensive.ui.group
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -11,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.activity_group.toolbar
+import kotlinx.android.synthetic.main.activity_main.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.UserItem
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
@@ -29,8 +36,39 @@ class GroupActivity : AppCompatActivity() {
         initViewModel()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_search, menu)
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.handleSearchQuery(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.handleSearchQuery(newText)
+                return true
+            }
+
+        })
+        searchView.queryHint = "Введите имя пользователя"
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == android.R.id.home){
+            finish()
+            overridePendingTransition(R.anim.idle, R.anim.bottom_down)
+            true
+        }else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun initToolbar() {
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)//стрелка назад
     }
 
     private fun initViews() {
@@ -41,12 +79,25 @@ class GroupActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@GroupActivity)
             addItemDecoration(divider)
         }
+        fabG.setOnClickListener{
+            viewModel.handleCreateGroup()
+            finish() //закрывает активити
+            overridePendingTransition(R.anim.idle, R.anim.bottom_down)  //анимация закрытия
+        }
     }
 
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(GroupViewModel::class.java)
         viewModel.getUsersData().observe(this, Observer { usersAdapter.updateData(it) })
-        viewModel.getSelectedData().observe(this, Observer { updateChips(it) })
+        viewModel.getSelectedData().observe(this, Observer {
+            updateChips(it)
+            toggleFab(it.size>1)
+        })
+    }
+
+    private fun toggleFab(isShow: Boolean) {
+        if (isShow) fabG.show()
+        else fabG.hide()
     }
 
     private fun addChipToGroup(user: UserItem){
@@ -56,7 +107,10 @@ class GroupActivity : AppCompatActivity() {
             isCloseIconVisible = true
             tag = user.id
             isClickable =true
-        }
+            closeIconTint = ColorStateList.valueOf(Color.WHITE)
+            chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
+            setTextColor(Color.WHITE)
+        } //TODO video 2:27 задание со *
         chip.setOnCloseIconClickListener{viewModel.handleRemoveChip(it.tag.toString())}
         chip_group.addView(chip)
     }

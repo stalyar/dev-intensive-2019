@@ -85,7 +85,7 @@ class ChatItemTouchHelperCallback(
         with(bgPaint){
             color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
         }
-
+        //TODO video 1:42 задание со *
         canvas.drawRect(bgRect, bgPaint)
     }
 }
