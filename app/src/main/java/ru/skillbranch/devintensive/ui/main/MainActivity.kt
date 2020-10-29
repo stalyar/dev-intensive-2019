@@ -37,12 +37,17 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
 
         chatAdapter = ChatAdapter{
-            Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG).show()
+            Snackbar
+                    .make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
+                    .show()
         }
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
             viewModel.addToArchive(it.id)
-            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG).show() //TODO showAction video 1:33
+            Snackbar
+                    .make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
+                    .setAction("Отменить") { _ -> viewModel.restoreFromArchive(it.id) }
+                    .show() //TODO showAction video 1:33
         }
         val touchHelper = ItemTouchHelper(touchCallback)
         touchHelper.attachToRecyclerView(rv_chat_list)
